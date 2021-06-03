@@ -10,14 +10,12 @@ public class Parse {
 
     public static List<Set<String>> parseAndGrouping(File file) throws IOException {
         List<String> input = new LinkedList<>(Files.readAllLines(Paths.get(String.valueOf(file)), StandardCharsets.UTF_8));
-        Map<String, List<String>> indexing = indexing(input.stream()
-                .distinct()
-                .collect(Collectors.toList()));
-        return grouping(input ,indexing);
+        Map<String, List<String>> indexed = indexing(input);
+        return grouping(input ,indexed);
     }
 
     static Map<String, List<String>> indexing(List<String> parsed) {
-        Map<String, List<String>> invertIndex = new HashMap<>();
+        Map<String, List<String>> invertedIndexing = new HashMap<>();
         for (String line : parsed) {
             String[] lineArray = line.split(";");
             if (lineArray.length != 3) {
@@ -27,21 +25,21 @@ public class Parse {
                 if (s == null || s.equals("") || s.equals("\"\"")) {
                     continue;
                 }
-                if (invertIndex.containsKey(s)) {
-                    invertIndex.get(s).add(line);
+                if (invertedIndexing.containsKey(s)) {
+                    invertedIndexing.get(s).add(line);
                     continue;
                 }
-                invertIndex.put(s, new LinkedList<>(List.of(line)));
+                invertedIndexing.put(s, new LinkedList<>(List.of(line)));
             }
         }
-        return invertIndex;
+        return invertedIndexing;
     }
 
-    static List<Set<String>> grouping(List<String> input, Map<String, List<String>> indexing) {
+    static List<Set<String>> grouping(List<String> input, Map<String, List<String>> indexed) {
         List<Set<String>> groups = new LinkedList<>();
-        Map<String, List<String>> mutableIndexing = new HashMap<>(indexing);
+        Map<String, List<String>> mutableIndexed = new HashMap<>(indexed);
         for (String line : input) {
-            Set<String> group = recursiveSearchIntersections(line, mutableIndexing);
+            Set<String> group = recursiveSearchIntersections(line, mutableIndexed);
             if (group.size() != 0) {
                 groups.add(group);
             }

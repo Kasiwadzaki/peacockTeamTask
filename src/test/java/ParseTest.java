@@ -139,8 +139,8 @@ class ParseTest {
 
     @ParameterizedTest
     @MethodSource("forGrouping")
-    void grouping(List<String> input, Map<String, List<String>> indexing, List<Set<String>> expected) {
-        List<Set<String>> actual = Parse.grouping(input, indexing);
+    void grouping(List<String> input, Map<String, List<String>> indexed, List<Set<String>> expected) {
+        List<Set<String>> actual = Parse.grouping(input, indexed);
         System.out.println(input);
         System.out.println(actual);
         System.out.println(expected);
