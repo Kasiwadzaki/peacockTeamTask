@@ -11,6 +11,7 @@ public class MainParse {
         Collections.reverse(groupedData);
         try {
             createFile(groupedData);
+            System.out.println("Файл создан");
         } catch (IOException e) {
             System.out.println("Не удалось создать файл");
         }
@@ -22,12 +23,13 @@ public class MainParse {
             return Parse.parseAndGrouping(file);
         } catch (IOException e) {
             System.out.println("Ошибка чтения файла");
+            System.exit(500);
         }
         return new LinkedList<>();
     }
 
     private static void createFile(List<Set<String>> groupedData) throws IOException {
-        FileWriter data = new FileWriter("groupsForPeacockTeam.csv", false);
+        FileWriter data = new FileWriter("../groupsForPeacockTeam.csv", false);
         data.write("Групп с более чем одним элементом " +
                 groupedData.stream()
                 .filter(set -> set.size() > 1)
